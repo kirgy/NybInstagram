@@ -1,0 +1,44 @@
+
+
+.nybSetting {
+	float:left;
+	clear: both;
+	margin-bottom: 2em;
+}
+
+.nybSetting .hashtag {
+	padding-left: 1.2em;
+	margin-left: -0.6em;
+}
+
+.nybSetting .hashtag-symbol {
+	position: relative;
+	right: -0.6em;	
+	color: #BBBBBB;
+}
+
+.nybSpacer {
+	width: 98%;
+	background: #E4E4E4;
+	height: 2px;
+	float: left;
+	clear: both;
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+.nybSetting .button {
+	margin-top: 2em;
+}
+
+.messages {
+	margin-left: 0px !important; 
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.nybInstagramSettings-wrap .importers {
+	margin-top: 1em;
+}

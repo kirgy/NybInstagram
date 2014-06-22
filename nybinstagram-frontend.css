@@ -1,0 +1,51 @@
+.size1of2 {
+	width: 50%;
+}
+
+.image {
+	float:left;
+}
+
+
+
+.size1of4 {
+	width: 25%;
+}
+.size3of4 {
+	width: 75%;
+}
+.size1of1 {
+	width: 100%;
+}
+
+.nybinstagram {
+	background: #FFCCFF;
+	width:100%;
+	padding: 0px;
+	margin: 0px;
+	width:100%;
+
+	font-size: 0px;
+	letter-spacing: 0px;
+	word-spacing: 0px;   		
+}
+
+.child {
+	vertical-align: baseline;
+
+}
+
+.nybinstagram img.child {
+	float: left;
+}
+
+.nybinstagram .child:last-of-type {
+}
+
+.float {
+	float: left;
+}
+
+.clear {
+	clear:both;
+}
