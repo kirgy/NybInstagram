@@ -45,7 +45,7 @@ if (!wp_next_scheduled('nybinstagram_docron')) {
 	wp_schedule_event( time(), 'minute', 'nybinstagram_docron' );
 }
 // handle form posts
-if($_POST) {
+if($_POST && $_GET['page']=='nybinstagram-options') {
    nybinstagram_form_handler($_POST);
 }
 
