@@ -87,12 +87,15 @@ class NybInstagram extends Instagram {
 			$oAccess = $this->getOAuthToken($_GET['code']);
 			$aAccess = json_decode(json_encode($oAccess));
 
-			update_option('nybinstagram_access_token', $oAccess->access_token, null, 1);
+			if($oAccess->access_token != '' || $oAccess->access_token!=null) {
+				update_option('nybinstagram_access_token', $oAccess->access_token, null, 1);
+			}
 			update_option('nybinstagram_account_name', $oAccess->user->username, null, 1);
 			update_option('nybinstagram_account_id', $oAccess->user->id, null, 1);
 
+			$sAccess = $oAccess->access_token;
 			$this->aSettings['wp-options']['nybinstagram_access_token'] == $sAccess; 	// update just in case
-			$this->setAccessToken($sAccess); // set object access token just in case
+			$this->setAccessToken($aAccess); // set object access token just in case
 
 			$sURL = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
 			$aURLPart = explode('&code', $sURL);
@@ -191,6 +194,10 @@ class NybInstagram extends Instagram {
 
 	public function set_data(){
 		global $wpdb;
+		$this->data = new stdClass();
+		$this->data->account = new stdClass();
+		$this->data->hashtag = new stdClass();
+		$this->data->all 	 = new stdClass();
 		// ACCOUNT
 		$this->data->account = $wpdb->get_results("SELECT * FROM " . $wpdb->prefix . $this->aSettings['wp-table'] . ' WHERE sourcetype=2 order by likes desc, comments desc, created desc limit ' . $this->aSettings['cache']['limit']);
 		// HASHTAG
