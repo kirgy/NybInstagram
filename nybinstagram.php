@@ -22,17 +22,15 @@
 
 
 //add_action("wp_head", "nybinstagram_writetoscreen");
+wp_register_style('nybInstagramFrontendStylesheet', plugins_url() . '/nybinstagram/nybinstagram-frontend.css');
+wp_enqueue_style( 'nybInstagramFrontendStylesheet');      
+
 add_action( 'admin_menu', 'nybinstagram_menu' );
 
 
 // get template and set it to shortcode for template output
 add_shortcode( 'nybinstagram', 'get_template_html' );
 
-// Setting panel style sheets
-wp_register_style('nybInstagramSettingsStylesheet', plugins_url() . '/nybinstagram/nybinstagram-settings.css');
-wp_register_style('nybInstagramFrontendStylesheet', plugins_url() . '/nybinstagram/nybinstagram-frontend.css');
-wp_enqueue_style( 'nybInstagramSettingsStylesheet');
-wp_enqueue_style( 'nybInstagramFrontendStylesheet');
 register_activation_hook( __FILE__, 'nybinstagram_activate' );
 register_deactivation_hook( __FILE__, 'nybinstagram_deactivate' );
 
@@ -92,9 +90,13 @@ function nybinstagram_menu() {
 }
 
 function nybinstagram_options() {
+   
    if ( !current_user_can( 'manage_options' ) )  {
       wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
    } else {
+      // Setting panel style sheets
+      wp_register_style('nybInstagramSettingsStylesheet', plugins_url() . '/nybinstagram/nybinstagram-settings.css');
+      wp_enqueue_style( 'nybInstagramSettingsStylesheet');
       $nybinsta = create_nybinsta();      
       $nybinsta->get_settings_page();
 
