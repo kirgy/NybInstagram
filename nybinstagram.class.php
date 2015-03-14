@@ -273,32 +273,36 @@ class NybInstagram extends Instagram {
 
 		if(get_option('nybinstagram_follow_hashtag') == 'true') {
 		 	$oInstPhotos = $this->getTagMedia(get_option('nybinstagram_hashtag'), 20 );
-			foreach ($oInstPhotos->data as $oInstPhoto) {
-				$sQuery0 = 'INSERT INTO ' . $table_name . ' VALUES ( ' .
-							 'null,' . 
-							 mysql_escape_string($oInstPhoto->user->id) . ',' . 
-							 '"' . mysql_escape_string($oInstPhoto->id) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->thumbnail->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->low_resolution->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->standard_resolution->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->link) . '",' . 
-							 '"' . mysql_escape_string(date("Y-m-d H:i:s", $oInstPhoto->created_time)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->likes->count) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->comments->count) . '",' . 
-							 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->caption->text)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->user->username) . '",' . 
-							 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->user->full_name)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->user->profile_picture) . '",' . 
-							 '"' . mysql_escape_string("1") . '",' . 
-							 '"' . date("Y-m-d H:i:s", time()) . '",' . 
-							 '"' . date("Y-m-d H:i:s", time()) . '"' .
-						') on duplicate key update likes=' . mysql_escape_string($oInstPhoto->likes->count) . ', comments=' . mysql_escape_string($oInstPhoto->comments->count) . '';
+		 	if(!isset($oInstPhotos->data)) {
+				$this->aErrors[] = 'No hashtag photos found. Try re-authenticating.';
+		 	} else {
+				foreach ($oInstPhotos->data as $oInstPhoto) {
+					$sQuery0 = 'INSERT INTO ' . $table_name . ' VALUES ( ' .
+								 'null,' . 
+								 mysql_escape_string($oInstPhoto->user->id) . ',' . 
+								 '"' . mysql_escape_string($oInstPhoto->id) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->thumbnail->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->low_resolution->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->standard_resolution->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->link) . '",' . 
+								 '"' . mysql_escape_string(date("Y-m-d H:i:s", $oInstPhoto->created_time)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->likes->count) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->comments->count) . '",' . 
+								 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->caption->text)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->user->username) . '",' . 
+								 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->user->full_name)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->user->profile_picture) . '",' . 
+								 '"' . mysql_escape_string("1") . '",' . 
+								 '"' . date("Y-m-d H:i:s", time()) . '",' . 
+								 '"' . date("Y-m-d H:i:s", time()) . '"' .
+							') on duplicate key update likes=' . mysql_escape_string($oInstPhoto->likes->count) . ', comments=' . mysql_escape_string($oInstPhoto->comments->count) . '';
 
-				if($wpdb->query($sQuery0) == 1){
-					$iSaved++;
-				}      
-				$iDownloaded++;
-			}
+					if($wpdb->query($sQuery0) == 1){
+						$iSaved++;
+					}      
+					$iDownloaded++;
+				}
+		 	}
 			$this->log("Downloaded $iDownloaded photos...(hashtag)");
 			$this->log("Saved $iSaved photos...(hashtag)");
 		}
@@ -306,31 +310,35 @@ class NybInstagram extends Instagram {
 		if(get_option('nybinstagram_follow_account') == 'true') {
 
 			$oInstPhotos = $this->getUserMedia('self', 20);
-			foreach ($oInstPhotos->data as $oInstPhoto) {
-				$sQuery0 = 'INSERT INTO ' . $table_name . ' VALUES ( ' .
-							 'null,' . 
-							 mysql_escape_string($oInstPhoto->user->id) . ',' . 
-							 '"' . mysql_escape_string($oInstPhoto->id) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->thumbnail->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->low_resolution->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->images->standard_resolution->url) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->link) . '",' . 
-							 '"' . mysql_escape_string(date("Y-m-d H:i:s", $oInstPhoto->created_time)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->likes->count) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->comments->count) . '",' . 
-							 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->caption->text)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->user->username) . '",' . 
-							 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->user->full_name)) . '",' . 
-							 '"' . mysql_escape_string($oInstPhoto->user->profile_picture) . '",' . 
-							 '"' . "2" . '",' . 
-							 '"' . date("Y-m-d H:i:s", time()) . '",' . 
-							 '"' . date("Y-m-d H:i:s", time()) . '"' .
-						') on duplicate key update likes=' . mysql_escape_string($oInstPhoto->likes->count) . ', comments=' . mysql_escape_string($oInstPhoto->comments->count) . '';
+		 	if(!isset($oInstPhotos->data)) {
+				$this->aErrors[] = 'No photos found. Try re-authenticating.';
+		 	} else {
+				foreach ($oInstPhotos->data as $oInstPhoto) {
+					$sQuery0 = 'INSERT INTO ' . $table_name . ' VALUES ( ' .
+								 'null,' . 
+								 mysql_escape_string($oInstPhoto->user->id) . ',' . 
+								 '"' . mysql_escape_string($oInstPhoto->id) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->thumbnail->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->low_resolution->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->images->standard_resolution->url) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->link) . '",' . 
+								 '"' . mysql_escape_string(date("Y-m-d H:i:s", $oInstPhoto->created_time)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->likes->count) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->comments->count) . '",' . 
+								 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->caption->text)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->user->username) . '",' . 
+								 '"' . mysql_escape_string(preg_replace('/[^(\x20-\x7F)]*/','', $oInstPhoto->user->full_name)) . '",' . 
+								 '"' . mysql_escape_string($oInstPhoto->user->profile_picture) . '",' . 
+								 '"' . "2" . '",' . 
+								 '"' . date("Y-m-d H:i:s", time()) . '",' . 
+								 '"' . date("Y-m-d H:i:s", time()) . '"' .
+							') on duplicate key update likes=' . mysql_escape_string($oInstPhoto->likes->count) . ', comments=' . mysql_escape_string($oInstPhoto->comments->count) . '';
 
-				if($wpdb->query($sQuery0) == 1){
-					$iSaved++;
-				}      
-			}
+					if($wpdb->query($sQuery0) == 1){
+						$iSaved++;
+					}      
+				}
+		 	}			
 			$this->log("Saved $iSaved photos...(account)");
 		}	
 			
